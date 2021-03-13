@@ -101,8 +101,8 @@ def test_task():
 def test_acrylic_1():   #Lu_pin_project_test
     global ItemNo
     Arm_state = robot_ctr.get_robot_motion_state()
+    change_to_right = 0
     if Arm_state == 1:
-
         # move to acrylic up center 
         if ItemNo==0: 
             pos.x =  -43.4
@@ -308,12 +308,16 @@ def test_acrylic_1():   #Lu_pin_project_test
             positon =  [pos.x, pos.y, pos.z, pos.pitch, pos.roll, pos.yaw]
             robot_ctr.Step_AbsPTPCmd(positon)
             # back to press 
-            ItemNo = 4
+            if change_to_right==0:
+                ItemNo = 4
+            else:
+                ItemNo = 20
             print("task:19")
 
         # here should insert turn off the suck power !!!!!
 #----------------------finish Lu ping project---------------------
         elif ItemNo==20:
+            change_to_right = 0
             robot_ctr.Set_operation_mode(0)
             robot_ctr.Go_home()
             ItemNo = 20
