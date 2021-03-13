@@ -1,0 +1,8 @@
+prefix=C:/hiwin_general_ws/devel
+
+Name: hiwin_driver
+Description: Description of hiwin_driver
+Version: 1.0.1
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

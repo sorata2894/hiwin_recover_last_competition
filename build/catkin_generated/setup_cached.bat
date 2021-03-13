@@ -1,0 +1,15 @@
+@echo off
+REM generated from catkin/python/catkin/environment_cache.py
+
+REM based on a snapshot of the environment before and after calling the setup script
+REM it emulates the modifications of the setup script without recurring computations
+
+REM new environment variables
+
+REM modified environment variables
+set CMAKE_PREFIX_PATH=C:\opt\ros\melodic\x64\tools\vcpkg\installed\x64-windows;C:/hiwin_general_ws/devel;C:/opt/ros/melodic/x64
+set LD_LIBRARY_PATH=C:/hiwin_general_ws/devel\lib;%LD_LIBRARY_PATH%
+set PATH=C:\opt\ros\melodic\x64\tools\vcpkg\installed\x64-windows\bin;C:\opt\ros\melodic\x64\tools\vcpkg;C:\opt\ros\melodic\x64\tools\graphviz;C:/hiwin_general_ws/devel\lib;C:/opt/ros/melodic/x64\bin;C:/opt/ros/melodic/x64\lib;C:\opt\ros\melodic\x64\;C:\opt\ros\melodic\x64\Scripts;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\\Extensions\Microsoft\IntelliCode\CLI;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\bin\HostX64\x64;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\VC\VCPackages;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TestWindow;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\TeamFoundation\Team Explorer;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\bin\Roslyn;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Team Tools\Performance Tools\x64;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Team Tools\Performance Tools;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Common\VSPerfCollectionTools\vs2019\\x64;C:\Program Files (x86)\Microsoft Visual Studio\Shared\Common\VSPerfCollectionTools\vs2019\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\devinit;C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64;C:\Program Files (x86)\Windows Kits\10\bin\x64;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\\MSBuild\Current\Bin;C:\Windows\Microsoft.NET\Framework64\v4.0.30319;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\Tools\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Users\will\AppData\Local\Programs\Python\Python38\Scripts\;C:\Users\will\AppData\Local\Programs\Python\Python38\;C:\Users\will\AppData\Local\Microsoft\WindowsApps;C:\Users\will\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin;C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja
+set PKG_CONFIG_PATH=C:/hiwin_general_ws/devel\lib\pkgconfig;%PKG_CONFIG_PATH%
+set PYTHONPATH=C:/hiwin_general_ws/devel\lib/site-packages;%PYTHONPATH%
+set ROS_PACKAGE_PATH=C:/hiwin_general_ws/src;%ROS_PACKAGE_PATH%

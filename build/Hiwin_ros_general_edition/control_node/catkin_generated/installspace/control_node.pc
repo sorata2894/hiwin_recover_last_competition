@@ -1,0 +1,8 @@
+prefix=C:/hiwin_general_ws/install
+
+Name: control_node
+Description: Description of control_node
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: 

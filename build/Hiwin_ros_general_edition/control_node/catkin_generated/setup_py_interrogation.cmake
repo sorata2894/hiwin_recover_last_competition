@@ -1,0 +1,7 @@
+set(control_node_SETUP_PY_SETUP_MODULE "distutils.core")
+set(control_node_SETUP_PY_VERSION "0.0.0")
+set(control_node_SETUP_PY_SCRIPTS "")
+set(control_node_SETUP_PY_PACKAGES "control_node")
+set(control_node_SETUP_PY_PACKAGE_DIRS "src/control_node")
+set(control_node_SETUP_PY_MODULES "")
+set(control_node_SETUP_PY_MODULE_DIRS "")

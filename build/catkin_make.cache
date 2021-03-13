@@ -1,0 +1,2 @@
+Hiwin_ros_general_edition\beginner_mission;Hiwin_ros_general_edition\control_node;Hiwin_ros_general_edition\hand_eye;Hiwin_ros_general_edition\hiwin_driver
+-DCMAKE_BUILD_TYPE=RelWithDebInfo -DCATKIN_DEVEL_PREFIX=C:\hiwin_general_ws\devel -DCMAKE_INSTALL_PREFIX=C:\hiwin_general_ws\install -G NMake Makefiles

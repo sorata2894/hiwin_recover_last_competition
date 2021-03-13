@@ -1,0 +1,8 @@
+prefix=C:/hiwin_general_ws/devel
+
+Name: beginner_mission
+Description: Description of beginner_mission
+Version: 0.0.0
+Cflags: -IC:/hiwin_general_ws/src/Hiwin_ros_general_edition/beginner_mission/include
+Libs: -L${prefix}/lib -lbeginner_mission
+Requires: geometry_msgs message_generation roscpp rospy std_msgs
