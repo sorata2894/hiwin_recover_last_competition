@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# license removed for brevity
+
 import rospy
 import sys
 import time
@@ -67,7 +70,86 @@ class star_cfg():
         self.acrylic_z = acrylic_z + correction
         self.tool_z = tool_z + correction
 #star_config = star_cfg( -12.1 , -19.2 , -16.0 , 4.5 , -19.3 , -18.5 , -14.0) 
-star_config = star_cfg( 3.5 , -3.6 , -0.4 , 20.1 , -3.7 , -3.6 , 1.6)   # while tool
+star_config = star_cfg( 3.0 , -4.1 , -0.9 , 19.6 , -4.2 , -4.1 , 1.1)   # while tool
+
+class real_center_up():           #長邊座標補償位置
+    def __init__(self,y1,y2,y3,y4,y5,y6,x1,x2,x3,x4,x5,x6):
+        self.y1 = y1    
+        self.y2 = y2
+        self.y3 = y3
+        self.y4 = y4
+        self.y5 = y5
+        self.y6 = y6
+        self.x1 = x1
+        self.x2 = x2
+        self.x3 = x3
+        self.x4 = x4
+        self.x5 = x5
+        self.x6 = x6
+rcu = real_center_up(48.55 ,52.85 , 57.05 , 61.2 , 65.3 , 69.4 , -30.85 , -25.1 , -19.05 , -13.2 , -7.3 , -1.25 )
+
+class real_center_width():         #寬邊座標補償位置
+    def __init__(self,y1,y2,y3,y4,y5,y6,x1,x2,x3,x4,x5,x6):
+        self.y1 = y1    
+        self.y2 = y2
+        self.y3 = y3
+        self.y4 = y4
+        self.y5 = y5
+        self.y6 = y6
+        self.x1 = x1
+        self.x2 = x2
+        self.x3 = x3
+        self.x4 = x4
+        self.x5 = x5
+        self.x6 = x6
+rcw = real_center_width(25.35 , 29.65 , 33.9 , 38.05 , 42.25 , 46.4 , 2.35 , 8.35 , 14.35 , 20.35 , 26.05 , 32.0 )
+
+class ori_coordinate():            #原圖拼圖位置切割
+    def __init__(self,y1,y2,y3,y4,y5,y6,x1,x2,x3,x4,x5,x6,x7,x8): 
+        self.y1 = y1    
+        self.y2 = y2
+        self.y3 = y3
+        self.y4 = y4
+        self.y5 = y5
+        self.y6 = y6
+        self.x1 = x1
+        self.x2 = x2
+        self.x3 = x3
+        self.x4 = x4
+        self.x5 = x5
+        self.x6 = x6
+        self.x7 = x7
+        self.x8 = x8
+oc = ori_coordinate(34,250,444,641,830,1029,341,535,732,937,1117,1318,1513,1727)  
+
+#----------------------definition---------------------
+list_cnt_ux =[]     #長邊座標補償後座標
+list_cnt_uy =[]
+
+list_cnt_wx =[]     #寬邊座標補償後座標
+list_cnt_wy =[]
+
+list_angle_up = []  #長邊算出後角度差
+list_area_up = []   #長邊屬於第幾塊拼圖
+list_angleflag_up = []   #判斷是否要提前轉90
+                         # 1 = 轉90
+                         # 2 = 轉-90
+
+
+list_angle_width = []  #寬邊算出後角度差
+list_area_width = []   #寬邊屬於第幾塊拼圖
+list_angleflag_width = []   #判斷是否要提前轉90
+                            # 1 = 轉90
+                            # 2 = 轉-90
+
+list_c_up = []          #長邊圈出圓心 座標
+list_c_width = []       #寬邊圈出圓心 座標
+
+list_c_again = []       #再次圈出圓心 座標
+
+
+
+
 
 
 ##-----------switch define------------##
@@ -140,11 +222,14 @@ def test_acrylic_1():   #Lu_pin_project_test
 
         #down to suck acrylic
         elif ItemNo==1: 
+            robot_ctr.Set_digital_output(1,True)
+            time.sleep(0.2)
             pos.x = pos.x
             pos.y = pos.y
             pos.z = star_config.testdown_z
             positon =  [pos.x, pos.y, pos.z, pos.pitch, pos.roll, pos.yaw]
             robot_ctr.Step_AbsPTPCmd(positon)
+            
             ItemNo = 2
             print("task:1")
 
@@ -166,6 +251,7 @@ def test_acrylic_1():   #Lu_pin_project_test
             pos.z = star_config.yolo_z
             positon =  [pos.x, pos.y, pos.z, pos.pitch, pos.roll, pos.yaw]
             robot_ctr.Step_AbsLine_PosCmd(positon)
+            
             ItemNo = 4
             print("task:3")
 
@@ -173,6 +259,7 @@ def test_acrylic_1():   #Lu_pin_project_test
         
         # move to acrylic upper left 
         elif ItemNo==4:
+            robot_ctr.Set_digital_output(1,False)
             pos.x = pos.x  - 4.5
             pos.y = pos.y  + 7
             pos.z = star_config.above_z
@@ -303,6 +390,8 @@ def test_acrylic_1():   #Lu_pin_project_test
 
         # down to suck acrylic
         elif ItemNo==17:
+            #if change_to_right == 0:
+            robot_ctr.Set_digital_output(1,True)
             pos.x = pos.x
             pos.y = pos.y
             pos.z = star_config.acrylic_z
@@ -313,7 +402,7 @@ def test_acrylic_1():   #Lu_pin_project_test
 
         # here should insert turn on the suck power !!!!!
         #suck the acrylic arm up a little make sure not crush tool
-        elif ItemNo==18:  
+        elif ItemNo==18:
             pos.x = pos.x
             pos.y = pos.y
             pos.z = star_config.above_z
@@ -326,28 +415,42 @@ def test_acrylic_1():   #Lu_pin_project_test
 #----------------------change to right side of the puzzle to press---------------------
         # move to right center puzzle
         elif ItemNo==19:
+            
             print("change_to_right = ",change_to_right)
             pos.x =  -10.3
             pos.y =  34.3
             pos.z = star_config.yolo_z
             positon =  [pos.x, pos.y, pos.z, pos.pitch, pos.roll, pos.yaw]
             robot_ctr.Step_AbsPTPCmd(positon)
+            
             # back to press 
             if change_to_right == 0:
+                time.sleep(1.5)
                 change_to_right = 1
                 print("change_to_right = ",change_to_right)
+                robot_ctr.Set_digital_output(1,False)
                 ItemNo = 4
             elif change_to_right == 1:
                 ItemNo = 20
             print("task:19")
 
+        elif ItemNo==20:
+            pos.x =  -43.4
+            pos.y =  34.3
+            pos.z = star_config.down_z
+            positon =  [pos.x, pos.y, pos.z, pos.pitch, pos.roll, pos.yaw]
+            robot_ctr.Step_AbsPTPCmd(positon)
+            ItemNo = 21
+            print("task:20")
+
         # here should insert turn off the suck power !!!!!
 #----------------------finish Lu ping project---------------------
-        elif ItemNo==20:
+        elif ItemNo==21:
+            robot_ctr.Set_digital_output(1,False) 
             change_to_right = 0
             robot_ctr.Set_operation_mode(0)
             robot_ctr.Go_home()
-            ItemNo = 20
+            ItemNo = 21
             print("task:20 GO home")
 
 def test_five_point():   #test_five_point_project_test
@@ -377,7 +480,7 @@ def test_five_point():   #test_five_point_project_test
 
         #POINT 1  UP
         elif ItemNo==2: 
-            corr_input = int(input('繼續校正請按1 返回原始校正點請按2 : '))
+            corr_input = int(input('continue press 1 return original point input 2 : '))
             if corr_input == 1: 
                 pos.x = five_pos.x
                 pos.y = five_pos.y
@@ -385,10 +488,8 @@ def test_five_point():   #test_five_point_project_test
                 positon =  [pos.x, pos.y, pos.z, pos.pitch, pos.roll, pos.yaw]
                 robot_ctr.Step_AbsPTPCmd(positon)
                 ItemNo = 3
-                break
-             if corr_input == 2:
+            if corr_input == 2:
                 ItemNo = 100
-                break
             print("task:2")
         # tool 2 UP
         elif ItemNo==3:
@@ -413,7 +514,7 @@ def test_five_point():   #test_five_point_project_test
 
         #tool 2 UP
         elif ItemNo==5:
-            corr_input = int(input('繼續校正請按1 返回原始校正點請按2 : '))
+            corr_input = int(input('continue press 1 return original point input 2 : '))
             if corr_input == 1:
                 pos.x = tool_place.tool_x2
                 pos.y = tool_place.tool_y2
@@ -423,7 +524,6 @@ def test_five_point():   #test_five_point_project_test
                 ItemNo = 6
             if corr_input == 2:
                 ItemNo = 101
-                break
             print("task:5")
         
         # tool 1 UP
@@ -448,7 +548,7 @@ def test_five_point():   #test_five_point_project_test
 
         # tool 1 UP
         elif ItemNo==8:
-            corr_input = int(input('繼續校正請按1 返回原始校正點請按2 : '))
+            corr_input = int(input('continue press 1 return original point input 2 : '))
             if corr_input == 1:
                 pos.x = tool_place.tool_x1
                 pos.y = tool_place.tool_y1
@@ -458,7 +558,6 @@ def test_five_point():   #test_five_point_project_test
                 ItemNo = 9
             if corr_input == 2:
                 ItemNo = 101
-                break
             print("task:8")
 
         # POINT 2  UP
@@ -483,7 +582,7 @@ def test_five_point():   #test_five_point_project_test
 
         # POINT 2  UP
         elif ItemNo==11:
-            corr_input = int(input('繼續校正請按1 返回原始校正點請按2 : '))
+            corr_input = int(input('continue press 1 return original point input 2 : '))
             if corr_input == 1:
                 pos.x = -5.9
                 pos.y = 41.0
@@ -493,7 +592,6 @@ def test_five_point():   #test_five_point_project_test
                 ItemNo = 12
             if corr_input == 2:
                 ItemNo = 100
-                break
             print("task:11")
 
         # POINT 3  UP
@@ -518,7 +616,7 @@ def test_five_point():   #test_five_point_project_test
 
         # POINT 3  UP
         elif ItemNo==14:
-            corr_input = int(input('繼續校正請按1 返回原始校正點請按2 : '))
+            corr_input = int(input('continue press 1 return original point input 2 : '))
             if corr_input == 1:
                 pos.x = -5.9
                 pos.y = 27.3
@@ -528,7 +626,6 @@ def test_five_point():   #test_five_point_project_test
                 ItemNo = 15
             if corr_input == 2:
                 ItemNo = 100
-                break
             print("task:14")
 
         # POINT 4 UP
@@ -553,7 +650,7 @@ def test_five_point():   #test_five_point_project_test
 
         # POINT 4 UP
         elif ItemNo==17:
-            corr_input = int(input('繼續校正請按1 返回原始校正點請按2 : '))
+            corr_input = int(input('continue press 1 return original point input 2 : '))
             if corr_input == 1:
                 pos.x = -27.4
                 pos.y = 27.3
@@ -563,7 +660,6 @@ def test_five_point():   #test_five_point_project_test
                 ItemNo = 18
             if corr_input == 2:
                 ItemNo = 100
-                break
             print("task:17")
 
         #POINT 5 UP
@@ -608,7 +704,7 @@ def test_five_point():   #test_five_point_project_test
             print("task:21")
         # test finish
         # here should insert turn off the suck power !!!!!
-       
+      
 #----------------------finish test_five_point_project_test---------------------
         elif ItemNo==22:
             change_to_right = 0
@@ -635,7 +731,16 @@ def test_five_point():   #test_five_point_project_test
             ItemNo = 0
             print("task:0")
 
-
+def test_suck():   #Lu_pin_project_test
+    global ItemNo
+    global change_to_right
+    Arm_state = robot_ctr.get_robot_motion_state()
+    # print("state:",Arm_state)
+    if Arm_state == 1:
+       robot_ctr.Set_digital_output(1,True)
+       time.sleep(0.2) 
+       robot_ctr.Set_digital_output(1,False)
+    
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser("Driver Node")
@@ -683,9 +788,17 @@ if __name__ == '__main__':
             robot_ctr.Set_override_ratio(10)
             robot_ctr.Set_acc_dec_ratio(100)
         # put the function of program step by step
+            # robot_ctr.Set_robot_output(2,False)
+            # robot_ctr.Set_robot_output(3,False)
+            # robot_ctr.Set_robot_output(4,False)
+            robot_ctr.Set_digital_output(1,False)
+            robot_ctr.Set_digital_output(2,False)
+            robot_ctr.Set_digital_output(3,False)
+
             while(1):
-                #test_acrylic_1()
-                test_five_point()
+                test_acrylic_1()
+                #test_five_point()
+                #test_suck()
         
             #pose = robot_ctr.Get_current_position()
             #print("pose:",pose)
